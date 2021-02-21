@@ -11,7 +11,7 @@ The compendium contains the data, code, and notebook associated with the case st
 
   - The `6a_dataset.csv` file contains the data for 6A case study.
   - The `6b_dataset.csv` file contains the data for 6B case study.
-  - The `burst_analysis.R` file contatins the R code for 6B case study.
+  - The `burst_detection.R` file contatins the R code for 6B case study.
   - The `Case_Study_6B.ipynb` file contatins the Jupyter notebook for 6B case study.
 
 # How to download or install
