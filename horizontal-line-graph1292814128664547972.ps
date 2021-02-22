@@ -1,0 +1,818 @@
+%!PS-Adobe-3.0
+%%Pages: 3
+%%Title: (Temporal Bar Graph)
+%%Creator: (Sci2)
+%%CreationDate: (2021-02-23)
+%%BeginFeature: *PageSize Letter
+	letter
+%%EndFeature
+%%EndComments
+		
+%%BeginProlog
+%%EndProlog
+		
+%%BeginSetup
+%%BeginFeature: *PageSize Letter
+	<< /PageSize [792.0 612.0] >> setpagedevice
+%%EndFeature
+%%EndSetup
+	
+%%%%%%%%%%%%%%%%%%%%%%%
+% pageHeading Positioning
+%%%%%%%%%%%%%%%%%%%%%%%
+
+/pageHeadingLeft { 18.0 } def
+/pageHeadingBottom { 594.0 } def
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Title - pageHeading
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+/pageHeading {
+
+/pageHeadingTop { pageHeadingBottom } def % HACK until I've rewritten this
+/lineSpacing { 3.0 } def
+/titleFontSize { 14 } def
+/titleFont { /Arial-BoldMT titleFontSize selectfont } def
+/otherFontSize { 10 } def
+/otherFont { /ArialMT otherFontSize selectfont } def
+
+/title { (Temporal Visualization) } def
+/query { ((Generated from CSV file: C:\\Users\\lamba\\AppData\\Local\\Temp\\temp\\Preprocessed-maximum burst level_22_02_2021-26593005489778183.csv)) } def
+/date { (February 23, 2021 | 1:30 AM +05:30) } def
+
+gsave
+
+pageHeadingLeft pageHeadingTop translate
+0 0 moveto
+	
+0 titleFontSize neg moveto
+gsave titleFont title show grestore
+0 titleFontSize lineSpacing add neg rmoveto
+
+query length 0 gt % query exists or doesn't
+{ 
+	gsave otherFont query show grestore
+	0 otherFontSize lineSpacing add neg rmoveto
+} 
+if
+
+gsave otherFont date show grestore
+0 otherFontSize lineSpacing add neg rmoveto
+
+grestore
+
+} def
+
+%%%%%%%%%%%
+% Utilities
+%%%%%%%%%%%
+% Taken from http://stackoverflow.com/questions/518837/how-can-you-get-the-height-metric-of-a-string-in-postscript
+/textheight { % (text) => [text_height]
+    gsave                                  % save graphic context
+    {                            
+        100 100 moveto                     % move to some point 
+        true charpath pathbbox      	   % gets text path bounding box (LLx LLy URx URy)
+        exch pop 3 -1 roll pop             % keeps LLy and URy
+        exch sub                           % URy - LLy
+    }
+    stopped                                % did the last block fail?
+    {
+        pop pop                            % get rid of "stopped" junk
+        currentfont /FontMatrix get 3 get  % gets alternative text height
+    }
+    if
+    grestore                               % restore graphic context
+} bind def
+
+/center { % (text) x y => -
+	moveto dup stringwidth pop -2 div 0 rmoveto
+} def
+
+/concatstrings { % (a) (b) => (ab)
+	exch dup length
+	2 index length add string
+	dup dup 4 2 roll copy length
+	4 -1 roll putinterval
+} bind def
+
+/righttrim { % [x]points (abcde) -> (a...)
+	dup % => [x] (text) (text)
+	stringwidth pop % => [x] (text) [text_width]
+	3 -1 roll % => (text) [text_width] [x]
+	dup % => (text) [text_width] [x] [x]
+	3 1 roll % => (text) [x] [text_width] [x]
+	gt % => (text) [x] 
+	{ 
+	exch dup % => [x] (text) (text)
+	length 1 sub % [x] (text) [text_length - 1]
+	0 exch getinterval % (t)
+	righttrim
+	dup length 3 sub % (text) [text_length - 3]
+	0 exch getinterval % (t)
+	(...) concatstrings % [x] (t...)
+	} 
+	{
+	pop % => (t...)
+	}
+	ifelse
+} def
+
+/centerTextLine { % x y string => - moves to where the text would be centered
+    textheight 0.5 mul neg
+    0 exch rmoveto
+} bind def
+
+%%%%%%%%%%%%%%%%%%%%%%%
+% areaLegend Positioning
+%%%%%%%%%%%%%%%%%%%%%%%
+
+/areaLegendLeft { 259.2 } def
+/areaLegendBottom { 108.0 } def
+
+%%%%%%%%%%%%%%%%
+%  AreaLegend  %
+%%%%%%%%%%%%%%%%
+/areaLegend {
+	/areaLegendTop { areaLegendBottom } def % HACK.  Sadly I chose the wrong dimentions to specify.  I should have done top and left.  Until I fix that, this is here.
+	/fontSize { 10 } def
+	/barWidth { 50.0 } def
+	/space { 6 } def
+	
+	/draw0Legend { true } def
+	/bigBarHeight { 18.0 } def
+	/medBarHeight { 6.0 } def
+	/smallBarHeight { 2.0 } def
+	
+	/bigBarValue { (2) } def
+	/medBarValue { (1) } def
+	/smallBarValue { (0) } def
+	
+	/yearValue { (0.26 Year(s)) } def
+	
+	/setTitleFont { /Arial-BoldMT 14 selectfont } def
+	/legendText { (Area) } def
+	
+	gsave
+	/ArialMT fontSize selectfont
+	0 0 moveto
+	areaLegendLeft areaLegendTop translate
+	% Draw the title
+	gsave
+		0 0 moveto
+		setTitleFont
+		legendText stringwidth pop 10 add neg legendText textheight neg rmoveto
+		legendText show
+	grestore
+	% Draw the big bar and label
+	0 0 moveto
+		barWidth 0 rlineto
+		0 bigBarHeight neg rlineto
+		barWidth neg 0 rlineto
+	fill
+	barWidth 5 add 0 moveto
+	0 bigBarHeight 2 div neg 1 add rmoveto 
+	bigBarValue centerTextLine bigBarValue show
+	0 bigBarHeight space add neg translate
+	
+	% Draw the med bar and label
+	0 0 moveto
+		barWidth 0 rlineto
+		0 medBarHeight neg rlineto
+		barWidth neg 0 rlineto
+	fill
+	barWidth 5 add 0 moveto
+	0 medBarHeight 2 div neg 1 add rmoveto 
+	medBarValue centerTextLine medBarValue show
+	0 medBarHeight space add neg translate
+	
+	% Draw the small bar and label
+	0 0 moveto
+		barWidth 0 rlineto
+		0 smallBarHeight neg rlineto
+		barWidth neg 0 rlineto
+	fill
+	barWidth 5 add 0 moveto
+	0 smallBarHeight 2 div neg 1 add rmoveto 
+	smallBarValue centerTextLine smallBarValue show
+	0 smallBarHeight space 4 add add neg translate
+	
+	% Draw the 0 bar and lable if needed
+	0 0 moveto
+	  draw0Legend 
+	  {
+		gsave
+	    [2] 0 setdash
+		0 setlinewidth
+		barWidth 0 rlineto
+		stroke
+		barWidth 5 add 0 moveto
+		(0) centerTextLine (0) show
+		grestore
+		0 space neg translate
+	  } 
+	if
+	
+	% Draw the year line
+	%%
+	% This creates a notch, but I don't know how to fix that.
+	%%
+	0 0 moveto
+	0 5 neg rlineto stroke
+	0 0 moveto
+	barWidth 0 rlineto stroke
+	barWidth 0 moveto
+	0 5 neg rlineto stroke
+	% Draw the year label
+	0 fontSize neg translate
+	0 5 neg moveto
+	yearValue show
+	0 fontSize space add neg translate
+	grestore
+
+} def
+
+%%%%%%%%%%%%%%%%%%%%%%%
+% footer Positioning
+%%%%%%%%%%%%%%%%%%%%%%%
+
+/footerLeft { 396.0 } def
+/footerBottom { 18.0 } def
+
+%%%%%%%%%%%%%
+% Footer Area
+%%%%%%%%%%%%%
+
+/footerFontSize { 10.0 } def
+
+/footer { % (footer)
+	gsave
+	0.6 0.6 0.6 setrgbcolor % #999999
+	/Arial-ItalicMT footerFontSize selectfont
+	792.0 2 div footerFontSize footerBottom add center
+	show
+	grestore
+} def 
+
+%%%%%%%%%%%%%%%%%%%%%%%
+% legendTitleTop Positioning
+%%%%%%%%%%%%%%%%%%%%%%%
+
+/legendTitleTopLeft { 18.0 } def
+/legendTitleTopBottom { 108.0 } def
+
+%%%%%%%%%%%%%%%
+% Legend Area
+%%%%%%%%%%%%%%%
+/legendTitleTopTop { legendTitleTopBottom } def % HACK until I redo all the postscript to work from the top down.
+
+/legendTitleTopTitle { (Legend) } def
+/legendTitleTopArea { (Area size: Weight) } def
+/legendTitleTopMin { (Minimum = 1) } def
+/legendTitleTopMax { (Maximum = 4) } def
+/legendTitleTopLabel { (Text label: Word) } def
+/legendTitleTopColor1 { () } def
+/legendTitleTopColor2 { () } def
+
+/legendTitleTopTitleFontSize { 14 } def
+/legendTitleTopTitleFont { /Arial-BoldMT legendTitleTopTitleFontSize selectfont } def
+
+/legendTitleTopNormalFontSize { 10 } def
+/legendTitleTopNormalFont { /ArialMT legendTitleTopNormalFontSize selectfont } def
+
+
+/legendTitleTop { % (title) [min] [max] (category) => -
+	gsave
+	0 0 0 setrgbcolor
+	legendTitleTopLeft legendTitleTopTop translate
+	legendTitleTopTitleFontSize neg 0 exch translate
+	
+	0 0 moveto
+	legendTitleTopTitleFont 
+	legendTitleTopTitle show
+	legendTitleTopTitleFontSize neg 0 exch translate
+	
+	0 0 moveto
+	legendTitleTopNormalFont
+	legendTitleTopArea show
+	legendTitleTopNormalFontSize neg 0 exch translate
+	
+	0 0 moveto
+	legendTitleTopMin show
+	legendTitleTopNormalFontSize neg 0 exch translate
+	
+	0 0 moveto
+	legendTitleTopMax show
+	legendTitleTopNormalFontSize neg 0 exch translate
+	
+	0 0 moveto
+	legendTitleTopLabel show
+	legendTitleTopNormalFontSize neg 0 exch translate
+	
+	0 0 moveto 
+	legendTitleTopColor1 show
+	legendTitleTopNormalFontSize neg 0 exch translate
+	
+	0 0 moveto
+	legendTitleTopColor2 show
+	legendTitleTopNormalFontSize neg 0 exch translate
+	grestore
+} def
+	
+%%%%%%%%%%%%%%%%%%%%%%%
+% visualization Positioning
+%%%%%%%%%%%%%%%%%%%%%%%
+
+/visualizationLeft { 54.0 } def
+/visualizationBottom { 133.20000000000002 } def
+
+%%%%%%%%%%%
+% Viz Area 
+%%%%%%%%%%%
+/pointsPerDay { 0.5255474452554745 } def % unused here but useful for legends
+/pointsPerY { 888.6216832258062 } def % unused here but useful for legends
+/topVizPosition { 397.8 } def
+/leftTextMargin { visualizationLeft } def
+
+/bar { % x1 y1 deltaX deltaY => -
+	dup 0.0 eq 
+	{
+	pop % x1 y1 deltaX
+	3 1 roll % deltaX x1 y1
+	moveto % deltaX
+	[2] 0 setdash
+	0 setlinewidth
+	0 rlineto
+	stroke
+	}	
+	{
+	newpath
+	4 2 roll moveto
+	exch dup 0 rlineto 0 3 -1 roll
+	rlineto neg 0 rlineto
+	fill
+	} ifelse
+} def
+/labelbar { % (label) x1 y1 deltaX deltaY color => -
+	gsave
+	visualizationLeft visualizationBottom translate
+	leftTextMargin 0 translate
+	0 0 moveto
+	setrgbcolor
+	5 -1 roll % stack: x1 y1 deltaX deltaY label
+	4 index 4 index 3 index 2 div add % stack: x1 y1 deltaX deltaY label x1 (y1 + deltaY/2)
+	labelbarLabel % draw the label at x1 (y1 + deltaY/2)
+	bar
+	grestore
+} def
+/labelbarSpacing { visualizationLabelBarFontSize } def
+/labelbarLabel { % (label) [x] [y] => -
+	gsave
+	0 0 0 setrgbcolor
+	exch  % [y] [x]
+	dup  % [y] [x] [x]
+	3 -1 roll % [x] [x] [y]
+	moveto
+	leftTextMargin labelbarSpacing sub add exch righttrim
+	dup stringwidth pop neg labelbarSpacing sub % (label) x
+	exch dup textheight 2 div neg % x (label) y
+	3 -1 roll exch % (label) x y
+	rmoveto
+	show
+	grestore
+} def
+
+/datelineLineWidth { 0 } def
+/datelineDashSize { 5 } def
+/dateline { % (label) x => -
+	gsave
+	visualizationLeft visualizationBottom translate
+	leftTextMargin 0 translate
+	dup
+	0 moveto
+	0.3 0.3 0.3 setrgbcolor
+	[datelineDashSize] 0 setdash
+	datelineLineWidth setlinewidth
+	0 topVizPosition rlineto
+	stroke
+	0 0 0 setrgbcolor
+	datelinelabel
+	grestore
+} def
+
+/datelineLabelFont { /ArialMT } def
+/datelineLabelFontSize { 10.0 } def
+/datelinelabel { % (label) x => -
+	datelineLabelFont datelineLabelFontSize selectfont
+	datelineLabelFontSize neg center
+	show
+} def
+
+%%%%%%%%%%%%%%%%%%%%%%%
+% howto Positioning
+%%%%%%%%%%%%%%%%%%%%%%%
+
+/howtoLeft { 421.2 } def
+/howtoBottom { 108.0 } def
+
+%%%%%%%%%%%
+%  Howto  %
+%%%%%%%%%%%
+/howto {
+	/howtoTop { howtoBottom } def % HACK!  This is a shortcut until I update the code
+	/howtoTitleFontSize { 14 } def
+	/howtoTitleFont { /Arial-BoldMT howtoTitleFontSize selectfont } def
+	/howtoTextFontSize { 10 } def
+	/howtoTextFont { /ArialMT howtoTextFontSize selectfont } def
+	/howtoLineSpacing { 1.0 } def
+	
+	gsave
+	0 0 0 setrgbcolor
+	/ArialMT howtoTextFontSize selectfont
+	howtoLeft howtoBottom translate
+	0 howtoTitleFontSize neg moveto
+	gsave howtoTitleFont (How To Read This Map) show grestore
+	0 howtoTitleFontSize howtoLineSpacing add neg rmoveto
+	
+	howtoTextFont
+	gsave (This ) show /Arial-ItalicMT howtoTextFontSize selectfont (temporal bar graph) show howtoTextFont ( visualization represents each record as a horizontal) show grestore
+	0 howtoTextFontSize howtoLineSpacing add neg rmoveto
+	gsave (bar with a specific start and end date and a text label on its left side. The area) show grestore
+	0 howtoTextFontSize howtoLineSpacing add neg rmoveto
+	gsave (of each bar encodes a numerical attribute value, e.g., total amount of funding.) show grestore
+	0 howtoTextFontSize howtoLineSpacing add neg rmoveto
+	gsave (Bars may be colored to present categorical attribute values of records.) show grestore
+	0 howtoTextFontSize howtoLineSpacing add neg rmoveto
+	grestore
+	
+} def
+
+%%Page: 1 1
+
+pageHeading
+
+(CNS (cns.iu.edu)) footer
+
+gsave
+
+
+(2018) 0.0 dateline
+
+(2019) 191.82481751824818 dateline
+
+(2020) 383.64963503649636 dateline
+
+(2021) 576.0 dateline
+
+/visualizationLabelBarFontSize { 3.5513025498691957 } def
+/ArialMT visualizationLabelBarFontSize selectfont
+
+(a549) 0.0 3.5513025498691957 191.82481751824818 5.675451926875803 0.0 0.0 0.0 labelbar
+
+(abnorm) 0.0 12.778057026614194 191.82481751824818 5.038359105321656 0.0 0.0 0.0 labelbar
+
+(alanin) 0.0 21.367718681805044 191.82481751824818 4.900387585909316 0.0 0.0 0.0 labelbar
+
+(aminotransferas) 0.0 29.819408817583554 191.82481751824818 4.90743570948375 0.0 0.0 0.0 labelbar
+
+(antiprolif) 0.0 38.278147076936506 191.82481751824818 4.593112418478159 0.0 0.0 0.0 labelbar
+
+(asthma) 0.0 46.42256204528386 191.82481751824818 5.676847428105462 0.0 0.0 0.0 labelbar
+
+(biochemistri) 0.0 55.65071202325852 191.82481751824818 5.982599351896772 0.0 0.0 0.0 labelbar
+
+(blackwel) 0.0 65.1846139250245 191.82481751824818 3.981883785551864 0.0 0.0 0.0 labelbar
+
+(blot) 0.0 72.71780026044554 191.82481751824818 6.136443960118741 0.0 0.0 0.0 labelbar
+
+(cat) 0.0 82.40554677043347 191.82481751824818 4.445013250961715 0.0 0.0 0.0 labelbar
+
+(chaetomium) 0.0 90.40186257126437 191.82481751824818 3.6779184100915896 0.0 0.0 0.0 labelbar
+
+(cholera) 0.0 97.63108353122516 191.82481751824818 5.522187330547505 0.0 0.0 0.0 labelbar
+
+(cofactor) 0.0 106.70457341164186 191.82481751824818 3.5180456260902906 0.0 0.0 0.0 labelbar
+
+(compromis) 0.0 113.77392158760134 191.82481751824818 6.140701490243294 0.0 0.0 0.0 labelbar
+
+(concert) 0.0 123.46592562771382 191.82481751824818 4.445013250961715 0.0 0.0 0.0 labelbar
+
+(contrast) 0.0 131.46224142854473 191.82481751824818 4.49344638286176 0.0 0.0 0.0 labelbar
+
+(creation) 0.0 139.50699036127568 191.82481751824818 4.445013250961715 0.0 0.0 0.0 labelbar
+
+(crystallographi) 0.0 147.5033061621066 191.82481751824818 3.5180456260902906 0.0 0.0 0.0 labelbar
+
+(cytotox) 0.0 154.57265433806612 191.82481751824818 3.654765824967012 0.0 0.0 0.0 labelbar
+
+(depict) 0.0 161.77872271290232 191.82481751824818 3.475627498892022 0.0 0.0 0.0 labelbar
+
+(depolar) 0.0 168.80565276166354 191.82481751824818 4.286946477323604 0.0 0.0 0.0 labelbar
+
+(destabil) 0.0 176.64390178885634 191.82481751824818 4.750956391531775 0.0 0.0 0.0 labelbar
+
+(devic) 0.0 184.94616073025733 191.82481751824818 3.475627498892022 0.0 0.0 0.0 labelbar
+
+(dichroism) 0.0 191.97309077901855 191.82481751824818 3.475627498892022 0.0 0.0 0.0 labelbar
+
+(dimens) 0.0 199.00002082777976 191.82481751824818 4.127503250609397 0.0 0.0 0.0 labelbar
+
+(dion) 0.0 206.67882662825838 191.82481751824818 3.6779184100915896 0.0 0.0 0.0 labelbar
+
+(district) 0.0 213.90804758821918 191.82481751824818 4.273263926173425 0.0 0.0 0.0 labelbar
+
+(eastern) 0.0 221.7326140642618 191.82481751824818 3.661177322925525 0.0 0.0 0.0 labelbar
+
+(effector) 0.0 228.94509393705653 191.82481751824818 4.889804754129524 0.0 0.0 0.0 labelbar
+
+(electromagnet) 0.0 237.38620124105526 191.82481751824818 3.5180456260902906 0.0 0.0 0.0 labelbar
+
+(entiti) 0.0 244.45554941701477 191.82481751824818 4.593112418478159 0.0 0.0 0.0 labelbar
+
+(event) 0.0 252.59996438536214 191.82481751824818 6.923412471920119 0.0 0.0 0.0 labelbar
+
+(fas) 0.0 263.07467940715145 191.82481751824818 4.90743570948375 0.0 0.0 0.0 labelbar
+
+(feder) 0.0 271.5334176665044 191.82481751824818 4.900387585909316 0.0 0.0 0.0 labelbar
+
+(frequenc) 0.0 279.9851078022829 191.82481751824818 3.898101380476294 0.0 0.0 0.0 labelbar
+
+(fusion) 0.0 287.43451173262844 191.82481751824818 4.273263926173425 0.0 0.0 0.0 labelbar
+
+(glial) 0.0 295.25907820867104 191.82481751824818 4.593112418478159 0.0 0.0 0.0 labelbar
+
+(half) 0.0 303.4034931770184 191.82481751824818 4.273263926173425 0.0 0.0 0.0 labelbar
+
+(head) 0.0 311.228059653061 191.82481751824818 3.661177322925525 0.0 0.0 0.0 labelbar
+
+(hek293) 0.0 318.44053952585574 191.82481751824818 3.5180456260902906 0.0 0.0 0.0 labelbar
+
+(himach) 0.0 325.5098877018152 191.82481751824818 4.90743570948375 0.0 0.0 0.0 labelbar
+
+(histon) 0.0 333.9686259611682 191.82481751824818 8.966878629267239 0.0 0.0 0.0 labelbar
+
+(hypothes) 0.0 346.4868071403046 191.82481751824818 6.76767229244219 0.0 0.0 0.0 labelbar
+
+(irrevers) 0.0 356.805781982616 191.82481751824818 4.593112418478159 0.0 0.0 0.0 labelbar
+
+(kit) 0.0 364.95019695096335 191.82481751824818 5.214256146071092 0.0 0.0 0.0 labelbar
+
+(label) 0.0 373.71575564690363 191.82481751824818 9.608111999379146 0.0 0.0 0.0 labelbar
+
+(lake) 0.0 386.875170196152 191.82481751824818 3.8222247041097717 0.0 0.0 0.0 labelbar
+
+grestore
+
+legendTitleTop
+
+howto
+
+areaLegend
+
+showpage
+
+%%Page: 2 2
+
+pageHeading
+
+(CNS (cns.iu.edu)) footer
+
+gsave
+
+
+(2018) 0.0 dateline
+
+(2019) 191.82481751824818 dateline
+
+(2020) 383.64963503649636 dateline
+
+(2021) 576.0 dateline
+
+/visualizationLabelBarFontSize { 3.954829865908888 } def
+/ArialMT visualizationLabelBarFontSize selectfont
+
+(meiosi) 0.0 3.954829865908888 191.82481751824818 4.286946477323604 0.0 0.0 0.0 labelbar
+
+(morbid) 0.0 12.196606209141379 191.82481751824818 3.661177322925525 0.0 0.0 0.0 labelbar
+
+(mycobacteria) 0.0 19.81261339797579 191.82481751824818 3.8222247041097717 0.0 0.0 0.0 labelbar
+
+(nhej) 0.0 27.58966796799445 191.82481751824818 3.6779184100915896 0.0 0.0 0.0 labelbar
+
+(organell) 0.0 35.22241624399493 191.82481751824818 3.9666668525585487 0.0 0.0 0.0 labelbar
+
+(oxidas) 0.0 43.143912962462366 191.82481751824818 3.475627498892022 0.0 0.0 0.0 labelbar
+
+(penetr) 0.0 50.57437032726328 191.82481751824818 3.9666668525585487 0.0 0.0 0.0 labelbar
+
+(pigmentosa) 0.0 58.49586704573072 191.82481751824818 3.6779184100915896 0.0 0.0 0.0 labelbar
+
+(pla) 0.0 66.1286153217312 191.82481751824818 3.6779184100915896 0.0 0.0 0.0 labelbar
+
+(pradesh) 0.0 73.76136359773169 191.82481751824818 6.4484156976504625 0.0 0.0 0.0 labelbar
+
+(quiescenc) 0.0 84.16460916129104 191.82481751824818 3.6779184100915896 0.0 0.0 0.0 labelbar
+
+(recapitul) 0.0 91.79735743729152 191.82481751824818 3.981883785551864 0.0 0.0 0.0 labelbar
+
+(reciproc) 0.0 99.73407108875227 191.82481751824818 3.5180456260902906 0.0 0.0 0.0 labelbar
+
+(replac) 0.0 107.20694658075145 191.82481751824818 4.565129814187417 0.0 0.0 0.0 labelbar
+
+(retent) 0.0 115.72690626084776 191.82481751824818 4.273263926173425 0.0 0.0 0.0 labelbar
+
+(segreg) 0.0 123.95500005293007 191.82481751824818 5.675451926875803 0.0 0.0 0.0 labelbar
+
+(semen) 0.0 133.58528184571477 191.82481751824818 3.981883785551864 0.0 0.0 0.0 labelbar
+
+(silenc) 0.0 141.52199549717554 191.82481751824818 5.038359105321656 0.0 0.0 0.0 labelbar
+
+(smooth) 0.0 150.5151844684061 191.82481751824818 4.286946477323604 0.0 0.0 0.0 labelbar
+
+(somat) 0.0 158.75696081163858 191.82481751824818 4.900387585909316 0.0 0.0 0.0 labelbar
+
+(space) 0.0 167.6121782634568 191.82481751824818 3.9666668525585487 0.0 0.0 0.0 labelbar
+
+(spermatozoa) 0.0 175.53367498192424 191.82481751824818 3.6779184100915896 0.0 0.0 0.0 labelbar
+
+(superfamili) 0.0 183.16642325792472 191.82481751824818 5.058006542910679 0.0 0.0 0.0 labelbar
+
+(tempor) 0.0 192.1792596667443 191.82481751824818 4.419146265001496 0.0 0.0 0.0 labelbar
+
+(uncharacter) 0.0 200.55323579765468 191.82481751824818 3.5180456260902906 0.0 0.0 0.0 labelbar
+
+(union) 0.0 208.02611128965387 191.82481751824818 9.556443890150206 0.0 0.0 0.0 labelbar
+
+(venom) 0.0 221.53738504571297 191.82481751824818 3.8222247041097717 0.0 0.0 0.0 labelbar
+
+(vibrio) 0.0 229.31443961573163 191.82481751824818 4.127503250609397 0.0 0.0 0.0 labelbar
+
+(virolog) 0.0 237.39677273224993 191.82481751824818 3.5180456260902906 0.0 0.0 0.0 labelbar
+
+(western) 0.0 244.86964822424912 191.82481751824818 5.499682669924417 0.0 0.0 0.0 labelbar
+
+(zebrafish) 0.0 254.32416076008244 191.82481751824818 4.433887210833417 0.0 0.0 0.0 labelbar
+
+(acinetobact) 191.82481751824818 262.71287783682476 191.82481751824818 3.852245570387578 0.0 0.0 0.0 labelbar
+
+(alpin) 191.82481751824818 270.51995327312125 191.82481751824818 4.625930166725871 0.0 0.0 0.0 labelbar
+
+(arthriti) 191.82481751824818 279.100713305756 191.82481751824818 3.704488232504161 0.0 0.0 0.0 labelbar
+
+(atyp) 191.82481751824818 286.76003140416907 191.82481751824818 3.4070089748779897 0.0 0.0 0.0 labelbar
+
+(biopolym) 191.82481751824818 294.12187024495597 191.82481751824818 3.4070089748779897 0.0 0.0 0.0 labelbar
+
+(breast) 191.82481751824818 301.4837090857429 191.82481751824818 6.339593647485878 0.0 0.0 0.0 labelbar
+
+(cumul) 191.82481751824818 311.7781325991376 191.82481751824818 3.556077363281619 0.0 0.0 0.0 labelbar
+
+(cytometri) 191.82481751824818 319.28903982832816 191.82481751824818 5.108226142800622 0.0 0.0 0.0 labelbar
+
+(distinguish) 191.82481751824818 328.35209583703767 191.82481751824818 3.4070089748779897 0.0 0.0 0.0 labelbar
+
+(duplex) 191.82481751824818 335.71393467782457 191.82481751824818 4.625930166725871 0.0 0.0 0.0 labelbar
+
+(elucid) 191.82481751824818 344.29469471045934 191.82481751824818 4.753787469611714 0.0 0.0 0.0 labelbar
+
+(emt) 191.82481751824818 353.00331204597995 191.82481751824818 4.331606920827785 0.0 0.0 0.0 labelbar
+
+(fibroin) 191.82481751824818 361.2897488327166 191.82481751824818 3.704488232504161 0.0 0.0 0.0 labelbar
+
+(freez) 191.82481751824818 368.94906693112966 191.82481751824818 3.704488232504161 0.0 0.0 0.0 labelbar
+
+(hypersensit) 191.82481751824818 376.6083850295427 191.82481751824818 4.479094390392457 0.0 0.0 0.0 labelbar
+
+(machineri) 191.82481751824818 385.04230928584406 191.82481751824818 4.848030982338533 0.0 0.0 0.0 labelbar
+
+grestore
+
+legendTitleTop
+
+howto
+
+areaLegend
+
+showpage
+
+%%Page: 3 3
+
+pageHeading
+
+(CNS (cns.iu.edu)) footer
+
+gsave
+
+
+(2018) 0.0 dateline
+
+(2019) 191.82481751824818 dateline
+
+(2020) 383.64963503649636 dateline
+
+(2021) 576.0 dateline
+
+/visualizationLabelBarFontSize { 3.8246186433577782 } def
+/ArialMT visualizationLabelBarFontSize selectfont
+
+(mcf7) 191.82481751824818 3.8246186433577782 191.82481751824818 3.4070089748779897 0.0 0.0 0.0 labelbar
+
+(opportunist) 191.82481751824818 11.056246261593547 191.82481751824818 3.4070089748779897 0.0 0.0 0.0 labelbar
+
+(owner) 191.82481751824818 18.287873879829313 191.82481751824818 3.556077363281619 0.0 0.0 0.0 labelbar
+
+(oxford) 191.82481751824818 25.66856988646871 191.82481751824818 3.4070089748779897 0.0 0.0 0.0 labelbar
+
+(pharmaci) 191.82481751824818 32.90019750470448 191.82481751824818 3.852245570387578 0.0 0.0 0.0 labelbar
+
+(prenat) 191.82481751824818 40.57706171844984 191.82481751824818 4.625930166725871 0.0 0.0 0.0 labelbar
+
+(prokaryot) 191.82481751824818 49.02761052853349 191.82481751824818 3.4070089748779897 0.0 0.0 0.0 labelbar
+
+(strand) 191.82481751824818 56.25923814676926 191.82481751824818 4.063763707598985 0.0 0.0 0.0 labelbar
+
+(threaten) 191.82481751824818 64.14762049772602 191.82481751824818 7.938049359889922 0.0 0.0 0.0 labelbar
+
+(adsorb) 383.64963503649636 75.91028850097372 192.35036496350367 4.521367599085924 0.0 0.0 0.0 labelbar
+
+(adsorpt) 383.64963503649636 84.25627474341742 192.35036496350367 5.634713584580054 0.0 0.0 0.0 labelbar
+
+(antivir) 383.64963503649636 93.71560697135526 192.35036496350367 3.463577806627941 0.0 0.0 0.0 labelbar
+
+(asian) 383.64963503649636 101.00380342134098 192.35036496350367 3.6465721675798908 0.0 0.0 0.0 labelbar
+
+(aspergillus) 383.64963503649636 108.47499423227865 192.35036496350367 5.812387981172204 0.0 0.0 0.0 labelbar
+
+(c4) 383.64963503649636 118.11200085680863 192.35036496350367 3.6465721675798908 0.0 0.0 0.0 labelbar
+
+(captur) 383.64963503649636 125.5831916677463 192.35036496350367 5.869551256234178 0.0 0.0 0.0 labelbar
+
+(coronavirus) 383.64963503649636 135.27736156733826 192.35036496350367 8.331142189493425 0.0 0.0 0.0 labelbar
+
+(cov-2) 383.64963503649636 147.43312240018946 192.35036496350367 10.274991970382507 0.0 0.0 0.0 labelbar
+
+(covid-19) 383.64963503649636 161.53273301392974 192.35036496350367 10.274991970382507 0.0 0.0 0.0 labelbar
+
+(criteria) 383.64963503649636 175.63234362767002 192.35036496350367 3.8266565401679427 0.0 0.0 0.0 labelbar
+
+(daili) 383.64963503649636 183.28361881119574 192.35036496350367 4.932988115139759 0.0 0.0 0.0 labelbar
+
+(dehydr) 383.64963503649636 192.04122556969327 192.35036496350367 5.3431412035918635 0.0 0.0 0.0 labelbar
+
+(ehu) 383.64963503649636 201.20898541664292 192.35036496350367 4.467500450072275 0.0 0.0 0.0 labelbar
+
+(fatal) 383.64963503649636 209.50110451007296 192.35036496350367 3.6465721675798908 0.0 0.0 0.0 labelbar
+
+(graphic) 383.64963503649636 216.97229532101065 192.35036496350367 4.289336558896641 0.0 0.0 0.0 labelbar
+
+(incur) 383.64963503649636 225.08625052326508 192.35036496350367 3.8266565401679427 0.0 0.0 0.0 labelbar
+
+(microalga) 383.64963503649636 232.7375257067908 192.35036496350367 3.693692492882569 0.0 0.0 0.0 labelbar
+
+(nanocomposit) 383.64963503649636 240.25583684303115 192.35036496350367 4.521367599085924 0.0 0.0 0.0 labelbar
+
+(nitrat) 383.64963503649636 248.60182308547485 192.35036496350367 3.693692492882569 0.0 0.0 0.0 labelbar
+
+(pandem) 383.64963503649636 256.1201342217152 192.35036496350367 9.626145898396391 0.0 0.0 0.0 labelbar
+
+(paramount) 383.64963503649636 269.57089876346936 192.35036496350367 4.057766009261805 0.0 0.0 0.0 labelbar
+
+(pseudo) 383.64963503649636 277.45328341608894 192.35036496350367 4.521367599085924 0.0 0.0 0.0 labelbar
+
+(public) 383.64963503649636 285.79926965853264 192.35036496350367 3.643367198091939 0.0 0.0 0.0 labelbar
+
+(qtl) 383.64963503649636 293.26725549998235 192.35036496350367 5.3431412035918635 0.0 0.0 0.0 labelbar
+
+(ramaswami) 383.64963503649636 302.435015346932 192.35036496350367 3.8771948128111755 0.0 0.0 0.0 labelbar
+
+(recurr) 383.64963503649636 310.13682880310097 192.35036496350367 4.339802185503306 0.0 0.0 0.0 labelbar
+
+(remov) 383.64963503649636 318.30124963196204 192.35036496350367 3.4384681888241397 0.0 0.0 0.0 labelbar
+
+(respiratori) 383.64963503649636 325.56433646414393 192.35036496350367 6.459239425249769 0.0 0.0 0.0 labelbar
+
+(salin) 383.64963503649636 335.8481945327515 192.35036496350367 4.571785465919008 0.0 0.0 0.0 labelbar
+
+(sarma) 383.64963503649636 344.2445986420283 192.35036496350367 3.8771948128111755 0.0 0.0 0.0 labelbar
+
+(sorghum) 383.64963503649636 351.94641209819724 192.35036496350367 4.289336558896641 0.0 0.0 0.0 labelbar
+
+(spread) 383.64963503649636 360.0603673004517 192.35036496350367 4.339802185503306 0.0 0.0 0.0 labelbar
+
+(tendenc) 383.64963503649636 368.22478812931274 192.35036496350367 5.1092258848260075 0.0 0.0 0.0 labelbar
+
+(upv) 383.64963503649636 377.1586326574965 192.35036496350367 4.467500450072275 0.0 0.0 0.0 labelbar
+
+(xylos) 383.64963503649636 385.4507517509266 192.35036496350367 4.70001096235786 0.0 0.0 0.0 labelbar
+
+grestore
+
+legendTitleTop
+
+howto
+
+areaLegend
+
+showpage
+
+%%Trailer
