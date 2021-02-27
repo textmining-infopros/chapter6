@@ -1,7 +1,6 @@
 # Case Study : Burst Detection of Documents using Three Different Tools
 
-This repository contains a reproducible research compendium for the case study used in the book:
-Manika Lamba and Margam Madhusudhan (2021) Text Mining: An Uncharted Territory for Librarians, Springer.
+This repository contains a reproducible research compendium for the case study used in the book: Manika Lamba and Margam Madhusudhan (2021) Text Mining: An Uncharted Territory for Librarians, Springer.
 
 # How to cite
 Please cite this compendium as: xxxxxxx
@@ -10,6 +9,9 @@ Please cite this compendium as: xxxxxxx
 The compendium contains the data, code, and notebook associated with the case study. This case study is further divided into 6A, and 6B. 6A case study used Sci2 tool, and 6B case study used R programming language to perform burst detection. It is organized as follows:
 
   - The `6a_dataset.csv` file contains the data for 6A case study.
+    - The `6a_maximum_burst_level.csv` is a supplementary file that is associated with 6A case study.
+    - The `6a_results_barSizes.csv` is a supplementary file that is associated with 6A case study.
+    - The `6a_results_horizontal-line-graph.ps` is a supplementary file that is associated with 6A case study.
   - The `6b_dataset.csv` file contains the data for 6B case study.
   - The `burst_detection.R` file contatins the R code for 6B case study.
   - The `Case_Study_6B.ipynb` file contatins the Jupyter notebook for 6B case study.
