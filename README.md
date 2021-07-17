@@ -3,7 +3,13 @@
 
 This repository contains a reproducible research compendium for the case study used in the book: Manika Lamba and Margam Madhusudhan (2021) Text Mining for Information Professionals: An Uncharted Territory, SpringerNature.
 
-# How to cite
+🔭 [Springer Website](https://www.springer.com/in/book/9783030850845)
+
+🔭 [Authors' Book Website](https://textmining-infopros.github.io/)
+
+📫 For corrections/suggestions reach me at lambamanika07@gmail.com or create an issue [here](https://github.com/textmining-infopros/chapter6/issues)
+
+# How to Cite
 Please cite this compendium as: Lamba, Manika, & Madhusudhan, Margam. (2021). Burst Detection of Documents using Three Different Tools (Version 1.0). http://doi.org/10.5281/zenodo.5090220
 
 # Contents
@@ -17,7 +23,7 @@ The compendium contains the data, code, and notebook associated with the case st
   - The `burst_detection.R` file contatins the R code for 6B case study.
   - The `Case_Study_6B.ipynb` file contatins the Jupyter notebook for 6B case study.
 
-# How to download or install
+# How to Download or Install
 There are several ways to use the compendium’s contents and reproduce
 the analysis:
 
@@ -44,6 +50,6 @@ the analysis:
            2. Binder is meant for interactive and ephemeral interactive coding so an instance will die after 10 minutes of inactivity.
            3. An instance cannot be kept alive for more than 12 hours.
 
-### Licenses
+# Licenses
 
 **Code**, **Data :** MIT License
