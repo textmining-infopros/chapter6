@@ -1,5 +1,4 @@
-# Case Study: Burst Detection of Documents using Three Different Tools
-[![DOI](https://zenodo.org/badge/296730532.svg)](https://zenodo.org/badge/latestdoi/296730532)
+# Case Study: Burst Detection of Documents using Three Different Tools [![DOI](https://zenodo.org/badge/296730532.svg)](https://zenodo.org/badge/latestdoi/296730532)
 
 This repository contains a reproducible research compendium for the case study used in the book: Manika Lamba and Margam Madhusudhan (2021) Text Mining for Information Professionals: An Uncharted Territory, SpringerNature.
 
