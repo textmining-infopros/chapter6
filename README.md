@@ -14,7 +14,7 @@ This repository contains a reproducible research compendium for the case study u
 Please cite this compendium as: Lamba, Manika, & Madhusudhan, Margam. (2021). Burst Detection of Documents using Three Different Tools (Version 1.0). http://doi.org/10.5281/zenodo.5090220
 
 # Contents
-The compendium contains the data, code, and notebook associated with the case studies. This case study is further divided into 6A, and 6B. 6A case study used Sci2 tool, and 6B case study used R programming language to perform burst detection. It is organized as follows:
+The compendium contains the data, code, and notebook associated with the case studies. It is divided into 6A, and 6B. 6A case study used Sci2 tool, and 6B case study used R programming language to perform burst detection. It is organized as follows:
 
   - The `6a_dataset.csv` file contains the data for 6A case study.
     - The `6a_maximum_burst_level.csv` is a supplementary file that is associated with 6A case study.
