@@ -11,7 +11,7 @@ This repository contains a reproducible research compendium for the case study u
 📫 For corrections/suggestions reach me at lambamanika07@gmail.com or create an issue [here](https://github.com/textmining-infopros/chapter6/issues)
 
 # How to Cite
-Please cite this compendium as: Lamba, Manika, & Madhusudhan, Margam. (2021). Burst Detection of Documents using Three Different Tools (Version 1.2). https://doi.org/10.5281/zenodo.5203298
+Please cite this compendium as: **Lamba, Manika, & Madhusudhan, Margam. (2021). Burst Detection of Documents using Three Different Tools (Version 1.2). https://doi.org/10.5281/zenodo.5203298**
 
 # Contents
 The compendium contains the data, code, and notebook associated with the case studies. It is divided into 6A, and 6B. 6A case study used Sci2 tool, and 6B case study used R programming language to perform burst detection. It is organized as follows:
