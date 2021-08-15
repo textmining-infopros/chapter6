@@ -1,0 +1,10 @@
+name: textmining-infoprosCHAPTER6-binderized
+channels:
+  - conda-forge
+  - bioconda
+  - r
+dependencies:
+  - r-base>=4
+  - r-irkernel>=1.1
+  - r-bursts
+  - r-aRxiv
